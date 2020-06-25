@@ -7,7 +7,7 @@ import ScoreBoardOne from "./ScoreBoardOne";
 import HighScoresTable from "./HighScoresTable";
 import Dice from "./Dice"
 
-import { scoreDiceFor, scoresKeys, calculateTotalledScores } from "./Scoring";
+import { scoreDiceFor, scoresKeys, calculateTotalledScores, isYahtzee } from "./Scoring";
 import { saveHighScore, loadHighScores, wipeHighScores } from "./localStorageUtils";
 
 import "./YahtzeeApp.css"
@@ -15,6 +15,8 @@ import "./YahtzeeApp.css"
 
 
 function YahtzeeApp() {
+
+    const isDebug = false;
 
     const MAX_REROLLS = 3;
 
@@ -60,10 +62,19 @@ function YahtzeeApp() {
         return Object.values(withScores).every(v => v !== null);
     }
 
-    function acceptSuggestion(scoreKey, scoreValue) {
+    function acceptSuggestion(scoreKey, scoreValue, diceValues) {
         const newScores = { ...scores };
         if (newScores[scoreKey] === null) {
+
+            //If the dice show a yahtzee but you already scored one...
+            if (isYahtzee(diceValues) && newScores["yahtzee"]) {
+                //Award Bonus for second yahtzee
+                //TODO: implement joker rules, too
+                newScores["yahtzee"] += 100;
+            }
+
             newScores[scoreKey] = scoreValue;
+
             setScores(newScores);
             if (isGameOver(newScores)) {
                 const total = calculateTotalledScores(newScores).grandTotal;
@@ -72,6 +83,7 @@ function YahtzeeApp() {
             } else {
                 startNewTurn();
             }
+
         }
     }
 
@@ -97,6 +109,12 @@ function YahtzeeApp() {
         const toRoll = newDice.filter(die => !die.isLocked);
         const changedDice = toRoll.map(die => rerollOne(die));
         changedDice.forEach(die => newDice[die.ix] = die);
+        setDice(newDice);
+    }
+
+
+    function cheatRollYahtzee() {
+        const newDice = [...dice].map(die => { return { ...die, value: 1 } });
         setDice(newDice);
     }
 
@@ -157,10 +175,12 @@ function YahtzeeApp() {
                     suggestedScores={suggestedScores}
                     acceptSuggestion={acceptSuggestion}
                     hasTurnStarted={hasTurnStarted}
+                    diceValues={dice.map(die => die.value)}
                 />
                 <HighScoresTable highScores={highScores}
                     saveHighScoreNow={() => saveHighScore(totalledScores.grandTotal)}
                     wipeHighScores={wipeHighScores} />
+                {isDebug && <button onClick={cheatRollYahtzee}>Cheat!</button>}
             </div>
         </div>
     );

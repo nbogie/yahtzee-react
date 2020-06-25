@@ -3,7 +3,7 @@ import "./YahtzeeApp.css"
 import { scoresKeysUpper, scoresKeysLower } from "./Scoring";
 const debugOn = false;
 
-function ScoreBoardOne({ scores, suggestedScores, totals, acceptSuggestion, hasGameStarted, hasTurnStarted }) {
+function ScoreBoardOne({ scores, suggestedScores, totals, acceptSuggestion, hasGameStarted, hasTurnStarted, diceValues }) {
     function DebugPanel() {
         return (<>
             <div>{hasTurnStarted ? "turn started" : "turn not started"}</div>
@@ -27,6 +27,7 @@ function ScoreBoardOne({ scores, suggestedScores, totals, acceptSuggestion, hasG
                         hasTurnStarted={hasTurnStarted}
                         suggestedValue={suggestedScores[k]}
                         acceptSuggestion={acceptSuggestion}
+                        diceValues={diceValues}
                     ></ScoreLine>
                 ))
             }
@@ -48,6 +49,7 @@ function ScoreBoardOne({ scores, suggestedScores, totals, acceptSuggestion, hasG
                         hasTurnStarted={hasTurnStarted}
                         suggestedValue={suggestedScores[k]}
                         acceptSuggestion={acceptSuggestion}
+                        diceValues={diceValues}
                     ></ScoreLine>
                 ))
             }
@@ -58,7 +60,7 @@ function ScoreBoardOne({ scores, suggestedScores, totals, acceptSuggestion, hasG
         </div>);
 }
 
-function ScoreLine({ name, value, suggestedValue, acceptSuggestion, hasGameStarted, hasTurnStarted }) {
+function ScoreLine({ name, value, suggestedValue, acceptSuggestion, hasGameStarted, hasTurnStarted, diceValues }) {
     const fixed = value !== null;
     const unclickable = !hasGameStarted || !hasTurnStarted || fixed;
     const suggestedValueOrBlank = hasTurnStarted && suggestedValue > 0 ? suggestedValue : "";
@@ -66,13 +68,13 @@ function ScoreLine({ name, value, suggestedValue, acceptSuggestion, hasGameStart
         <span className="label">{name}</span>
         <span
             className={fixed ? "value" : "suggested-value"}
-            onClick={() => unclickable ? null : acceptSuggestion(name, suggestedValue)}
-        >{
-                hasGameStarted ? (fixed ? value : suggestedValueOrBlank) : null
-            }</span>
+            onClick={() => unclickable ? null : acceptSuggestion(name, suggestedValue, diceValues)}
+        >
+            {hasGameStarted ? (fixed ? value : suggestedValueOrBlank) : null}
+        </span>
 
 
-    </div>
+    </div >
 }
 
 

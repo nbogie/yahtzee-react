@@ -65,6 +65,8 @@ const hasSmallStraight = (values) => {
     );
 };
 
+export const isYahtzee = values => hasNOfAKind(values, 5);
+
 export function scoreDiceFor(key, values) {
     const lookup = {
         "ones": forOnes,
