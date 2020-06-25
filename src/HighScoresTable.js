@@ -1,8 +1,9 @@
 import React from "react";
 import moment from "moment";
 
-export default function HighScoresTable({ highScores, saveHighScoreNow, wipeHighScores }) {
+const debugOn = false;
 
+export default function HighScoresTable({ highScores, saveHighScoreNow, wipeHighScores }) {
     return (<div className="high-scores-table">
         <h3>High Scores</h3>
         {
@@ -10,10 +11,11 @@ export default function HighScoresTable({ highScores, saveHighScoreNow, wipeHigh
                 <HighScoreRow key={ix} score={score} date={date} />
             )
         }
-        <div className="high-scores-controls">
-            <button onClick={saveHighScoreNow}>Save high score now! (debugging)</button>
-            <button onClick={wipeHighScores}>Wipe ALL high score data! (debugging)</button>
-        </div>
+        {debugOn && (
+            <div className="high-scores-controls">
+                <button onClick={saveHighScoreNow}>Save high score now! (debugging)</button>
+                <button onClick={wipeHighScores}>Wipe ALL high score data! (debugging)</button>
+            </div>)}
     </div>)
 }
 

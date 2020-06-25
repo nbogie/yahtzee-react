@@ -10,11 +10,11 @@ function Die({ die, clickHandler, disabled }) {
     )
 }
 
-function Dice({ dice, gameInPlay, turnHasStarted, numRerollsRemaining, toggleLocked, attemptReroll }) {
+function Dice({ dice, gameInPlay, hasTurnStarted, numRerollsRemaining, toggleLocked, attemptReroll }) {
     const [lockedDice, liveDice] = _.partition(dice, (die) => die.isLocked);
     const canReroll = gameInPlay && numRerollsRemaining > 0;
 
-    const rollWord = turnHasStarted ? "Re-roll" : "Roll";
+    const rollWord = hasTurnStarted ? "Re-roll" : "Roll";
 
 
     return (
@@ -22,7 +22,7 @@ function Dice({ dice, gameInPlay, turnHasStarted, numRerollsRemaining, toggleLoc
         <div className="dice">
 
             {
-                !turnHasStarted ?
+                !hasTurnStarted ?
                     (
                         <div className="unstarted-dice dice-box">
                             {
@@ -62,8 +62,12 @@ function Dice({ dice, gameInPlay, turnHasStarted, numRerollsRemaining, toggleLoc
                         </>
                     )
             }
-            <button disabled={!canReroll} onClick={attemptReroll}>{rollWord}</button>
-            {rollWord} s remaining: <span className="rerolls-remaining">{numRerollsRemaining}</span>
+            <button
+                className="roll-button"
+                disabled={!canReroll}
+                onClick={attemptReroll}>{rollWord}
+            </button>
+            {rollWord + "s"} remaining: <span className="rerolls-remaining">{numRerollsRemaining}</span>
 
         </div >
     )

@@ -1,15 +1,22 @@
 //someone else's online version is here: https://cardgames.io/yahtzee/
 
+
 import React, { useState } from "react";
-import _ from "lodash";
-import "./YahtzeeApp.css"
+
 import ScoreBoardOne from "./ScoreBoardOne";
-import { scoreDiceFor, scoresKeys, calculateTotalledScores } from "./Scoring";
-import { saveHighScore, loadHighScores, wipeHighScores } from "./localStorageUtils";
 import HighScoresTable from "./HighScoresTable";
 import Dice from "./Dice"
-const MAX_REROLLS = 3;
+
+import { scoreDiceFor, scoresKeys, calculateTotalledScores } from "./Scoring";
+import { saveHighScore, loadHighScores, wipeHighScores } from "./localStorageUtils";
+
+import "./YahtzeeApp.css"
+
+
+
 function YahtzeeApp() {
+
+    const MAX_REROLLS = 3;
 
     const [numRerollsRemaining, setNumRerollsRemaining] = useState(MAX_REROLLS);
     const [dice, setDice] = useState(makeInitialDice());
@@ -18,6 +25,7 @@ function YahtzeeApp() {
     const [hasGameStarted, setHasGameStarted] = useState(false);
 
     const highScores = loadHighScores();
+
     function startNewGame() {
         setNumRerollsRemaining(MAX_REROLLS);
         setDice(makeInitialDice());
@@ -25,6 +33,7 @@ function YahtzeeApp() {
         setTurnNumber(0);
         setHasGameStarted(true);
     }
+
     function makeInitialDice() {
         return [
             { ix: 0, isLocked: false, value: randomDieValue() },
@@ -34,6 +43,12 @@ function YahtzeeApp() {
             { ix: 4, isLocked: false, value: randomDieValue() }
         ]
     }
+
+    function makeInitialScores() {
+        const res = {};
+        scoresKeys().forEach(k => res[k] = null);
+        return res;
+    };
 
     function startNewTurn() {
         setNumRerollsRemaining(MAX_REROLLS);
@@ -63,11 +78,11 @@ function YahtzeeApp() {
     function randomDieValue() {
         return pick([1, 2, 3, 4, 5, 6]);
     }
+
     function pick(arr) {
         const ix = Math.floor(Math.random() * arr.length);
         return arr[ix];
     }
-
 
     function attemptReroll() {
         if (numRerollsRemaining > 0) {
@@ -76,6 +91,7 @@ function YahtzeeApp() {
             setNumRerollsRemaining(old => old - 1);
         }
     }
+
     function rerollUnlockeds() {
         const newDice = [...dice];
         const toRoll = newDice.filter(die => !die.isLocked);
@@ -83,11 +99,13 @@ function YahtzeeApp() {
         changedDice.forEach(die => newDice[die.ix] = die);
         setDice(newDice);
     }
+
     function unlockOne(die) {
         const newDie = { ...die };
         newDie.isLocked = false;
         return newDie;
     }
+
     function unlockAllDice() {
         const newDice = dice.map(die => unlockOne(die));
         setDice(newDice);
@@ -98,55 +116,57 @@ function YahtzeeApp() {
         newDie.value = randomDieValue();
         return newDie;
     }
+
     function toggleLocked(die) {
         const newDice = [...dice];
         newDice[die.ix] = { ...die, isLocked: !die.isLocked };
         setDice(newDice);
     }
 
-    function makeInitialScores() {
-        const res = {};
-        scoresKeys().forEach(k => res[k] = null);
-        return res;
-    };
 
     const diceValues = dice.map(die => die.value);
 
     const suggestedScores = Object.fromEntries(Object.entries(scores).map(([k, v]) => [k, scoreDiceFor(k, diceValues)]));
 
     const totalledScores = calculateTotalledScores(scores);
+
+    const hasTurnStarted = numRerollsRemaining !== MAX_REROLLS;
     return (
         <div className="yahtzee-app">
-            <h1>Yahtzee React App</h1>
+            <h1>Yahtzee</h1>
             <div className="container">
-                <Dice
-                    dice={dice}
-                    gameInPlay={hasGameStarted && !isGameOver()}
-                    numRerollsRemaining={numRerollsRemaining}
-                    toggleLocked={toggleLocked}
-                    attemptReroll={attemptReroll}
-                    turnHasStarted={numRerollsRemaining !== MAX_REROLLS}
+                <div className='pane left'>
 
-                />
+                    <Dice
+                        dice={dice}
+                        gameInPlay={hasGameStarted && !isGameOver()}
+                        numRerollsRemaining={numRerollsRemaining}
+                        toggleLocked={toggleLocked}
+                        attemptReroll={attemptReroll}
+                        hasTurnStarted={hasTurnStarted}
+
+                    />
+                    <h3>{!hasGameStarted || isGameOver() ? <StartGameControl startGameFn={() => startNewGame()} /> : `Turn ${turnNumber}`}
+                        {isGameOver() ? <GameOver /> : null}</h3>
+                </div>
+
                 <ScoreBoardOne
                     scores={scores}
                     totals={totalledScores}
                     hasGameStarted={hasGameStarted}
                     suggestedScores={suggestedScores}
                     acceptSuggestion={acceptSuggestion}
+                    hasTurnStarted={hasTurnStarted}
                 />
                 <HighScoresTable highScores={highScores}
                     saveHighScoreNow={() => saveHighScore(totalledScores.grandTotal)}
                     wipeHighScores={wipeHighScores} />
             </div>
-            <h3>{!hasGameStarted || isGameOver() ? <StartGame startGameFn={() => startNewGame()} /> : `Turn ${turnNumber}`}
-                {isGameOver() ? <GameOver /> : null}</h3>
         </div>
     );
 }
 
-
-function StartGame({ startGameFn }) {
+function StartGameControl({ startGameFn }) {
     return (
         <div className="start-game-panel">
             <button onClick={startGameFn}>Start Game!</button>

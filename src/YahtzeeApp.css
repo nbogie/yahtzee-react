@@ -1,23 +1,44 @@
+/* 
+palette 
+https://www.colourlovers.com/palette/443995/i_demand_a_pancake
+*/
+
 * {
-  border: 1px solid gray;
+  /* border: 1px solid gray; */
+  border-radius: 3px;
 }
 body {
   max-width: 1000px;
-  margin: 0 auto;
-  border: 1px solid blue;
+  margin: 30px auto;
+  background: #594f4f;
+  color: #594f4f;
+}
+
+.yahtzee-app {
+  border: 2px solid rgba(100, 100, 100, 0.3);
+  box-shadow: 10px 10px 10px rgba(100, 100, 100, 0.3);
+  padding: 40px;
+  background: #e5fcc2;
+  border-radius: 10px;
 }
 .container {
   display: flex;
-  border: 1px solid red;
+  /* border: 1px solid red; */
   margin: 0 auto;
+
   justify-content: space-between;
 }
 
-.dice {
-  width: 100%;
+.pane.left {
+  display: flex;
+  flex-direction: column;
+  min-width: 240px;
 }
 .dice {
   width: 100%;
+}
+.h1 {
+  background: #9de0ad;
 }
 .locked {
   border: red 1px solid;
@@ -27,13 +48,13 @@ body {
 }
 
 .unstarted-dice {
-  border: 10px solid gray;
+  border: 10px solid #547980;
 }
 .locked-dice {
-  border: 10px solid red;
+  border: 10px solid #547980;
 }
 .live-dice {
-  border: 10px solid green;
+  border: 10px solid #45ada8;
 }
 .dice-box {
   padding: 10px;
@@ -46,7 +67,8 @@ body {
 }
 
 .die {
-  padding: 8px;
+  background: white;
+  padding: 10px;
   border-radius: 2px;
   margin: 3px;
   cursor: pointer;
@@ -57,10 +79,11 @@ body {
 }
 
 .scoreboard {
-  border: 10px solid orange;
+  border: 10px solid #547980;
   margin: 10px;
+  background: white;
   padding: 20px;
-  width: 100%;
+  /* width: 100%; */
 }
 
 .score-line {
@@ -68,6 +91,9 @@ body {
   min-width: 30%;
 }
 
+.score-line * {
+  border-radius: 0;
+}
 .total-line {
   background: #dddddd;
 }
@@ -75,35 +101,57 @@ body {
 .score-line .label {
   min-width: 150px;
   text-align: left;
-  border: 1px solid black;
+  border: 1px solid #594f4f;
   padding: 3px;
 }
 .score-line .value {
-  min-width: 100px;
+  min-width: 50px;
   text-align: left;
-  border: 1px solid black;
+  border: 1px solid #594f4f;
   padding: 3px;
   font-weight: bolder;
 }
 .score-line .suggested-value {
-  min-width: 100px;
+  min-width: 50px;
   text-align: left;
   color: red;
-  border: 1px solid black;
+  border: 1px solid #594f4f;
   padding: 3px;
 }
 
+.score-line.underline {
+  border-bottom-style: double;
+  border-bottom: 2px solid #594f4f;
+}
+.score-line.overline {
+  border-top-style: double;
+  border-top: 2px solid #594f4f;
+}
+
 .start-game-panel button {
-  background: green;
-  font-size: 32pt;
+  background: #9de0ad;
+  font-size: 24pt;
   border-radius: 5px;
+  padding: 10px;
+  color: #594f4f;
+}
+.roll-button {
+  padding: 10px;
+  border-radius: 3px;
+  margin-right: 10px;
 }
 
 .high-scores-table {
-  min-width: 200px;
+  min-width: 250px;
+  background: white;
+  color: #594f4f;
 }
+
 .high-score-row {
   display: flex;
+  border-bottom: 1px solid #594f4f;
+  border-radius: 0;
+  margin: 0 10px;
 }
 .high-score-row span {
   padding: 3px;
