@@ -1,66 +1,73 @@
-import React, { useState, useEffect } from "react";
+import React from "react"
 import _ from "lodash";
-import "./Dice.css"
-function Die({ die, clickHandler }) {
+
+function Die({ die, clickHandler, disabled }) {
     return (
         <button
+            disabled={disabled}
             className={"die" + (die.isLocked ? " locked" : " unlocked")}
             onClick={clickHandler}>{die.value}</button>
     )
 }
 
-function Dice() {
-    const [dice, setDice] = useState([
-        { ix: 0, isLocked: false, value: 1 },
-        { ix: 1, isLocked: false, value: 1 },
-        { ix: 2, isLocked: false, value: 1 },
-        { ix: 3, isLocked: false, value: 1 },
-        { ix: 4, isLocked: false, value: 1 }]
-    );
-
-    function pick(arr) {
-        const ix = Math.floor(Math.random() * arr.length);
-        return arr[ix];
-    }
-    function rerollUnlockeds() {
-        const toRoll = [...dice].filter(die => !die.isLocked);
-        const newDice = toRoll.map(die => rerollOne(die));
-        setDice(newDice);
-    }
-
-    function rerollOne(die) {
-        const newDie = { ...die };
-        newDie.value = pick([1, 2, 3, 4, 5, 6]);
-        return newDie;
-    }
-    function toggleLocked(die) {
-        const newDice = [...dice];
-        newDice[die.ix] = { ...die, isLocked: !die.isLocked };
-        console.log(newDice);
-        setDice(newDice);
-    }
+function Dice({ dice, gameInPlay, turnHasStarted, numRerollsRemaining, toggleLocked, attemptReroll }) {
     const [lockedDice, liveDice] = _.partition(dice, (die) => die.isLocked);
+    const canReroll = gameInPlay && numRerollsRemaining > 0;
+
+    const rollWord = turnHasStarted ? "Re-roll" : "Roll";
+
 
     return (
-        <div className="dice">
-            <div className="live-dice">
-                {
-                    liveDice.map(die =>
-                        <Die die={die} clickHandler={() => toggleLocked(die)}></Die>
-                    )
-                }
-            </div>
-            <div className="locked-dice">
-                {
-                    lockedDice.map(die =>
-                        <Die die={die} clickHandler={() => toggleLocked(die)}></Die>
-                    )
-                }
 
-            </div>
-            <button onClick={rerollUnlockeds}>Re-roll</button>
-        </div>
+        <div className="dice">
+
+            {
+                !turnHasStarted ?
+                    (
+                        <div className="unstarted-dice dice-box">
+                            {
+                                liveDice.map(die =>
+                                    <Die
+                                        key={die.ix}
+                                        die={die}
+                                        disabled={true}
+                                        clickHandler={() => null}></Die>
+                                )
+                            }
+                        </div>
+                    ) : (
+                        <>
+                            <div className="live-dice dice-box">
+                                {
+                                    liveDice.map(die =>
+                                        <Die
+                                            disabled={false}
+                                            key={die.ix}
+                                            die={die}
+                                            clickHandler={() => toggleLocked(die)}></Die>
+                                    )
+                                }
+                            </div>
+                            <div className="locked-dice dice-box">
+                                {
+                                    lockedDice.map(die =>
+                                        <Die
+                                            disabled={false}
+                                            key={die.ix}
+                                            die={die}
+                                            clickHandler={() => toggleLocked(die)}></Die>
+                                    )
+                                }
+                            </div>
+                        </>
+                    )
+            }
+            <button disabled={!canReroll} onClick={attemptReroll}>{rollWord}</button>
+            {rollWord} s remaining: <span className="rerolls-remaining">{numRerollsRemaining}</span>
+
+        </div >
     )
 
 }
+
 export default Dice;

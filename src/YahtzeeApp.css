@@ -1,0 +1,116 @@
+* {
+  border: 1px solid gray;
+}
+body {
+  max-width: 1000px;
+  margin: 0 auto;
+  border: 1px solid blue;
+}
+.container {
+  display: flex;
+  border: 1px solid red;
+  margin: 0 auto;
+  justify-content: space-between;
+}
+
+.dice {
+  width: 100%;
+}
+.dice {
+  width: 100%;
+}
+.locked {
+  border: red 1px solid;
+}
+.unlocked {
+  border: green 1px solid;
+}
+
+.unstarted-dice {
+  border: 10px solid gray;
+}
+.locked-dice {
+  border: 10px solid red;
+}
+.live-dice {
+  border: 10px solid green;
+}
+.dice-box {
+  padding: 10px;
+  border-radius: 5px;
+  margin: 10px;
+  height: 50px;
+}
+.unstarted-dice .die {
+  cursor: default;
+}
+
+.die {
+  padding: 8px;
+  border-radius: 2px;
+  margin: 3px;
+  cursor: pointer;
+}
+
+.rerolls-remaining {
+  font-weight: 900;
+}
+
+.scoreboard {
+  border: 10px solid orange;
+  margin: 10px;
+  padding: 20px;
+  width: 100%;
+}
+
+.score-line {
+  display: flex;
+  min-width: 30%;
+}
+
+.total-line {
+  background: #dddddd;
+}
+
+.score-line .label {
+  min-width: 150px;
+  text-align: left;
+  border: 1px solid black;
+  padding: 3px;
+}
+.score-line .value {
+  min-width: 100px;
+  text-align: left;
+  border: 1px solid black;
+  padding: 3px;
+  font-weight: bolder;
+}
+.score-line .suggested-value {
+  min-width: 100px;
+  text-align: left;
+  color: red;
+  border: 1px solid black;
+  padding: 3px;
+}
+
+.start-game-panel button {
+  background: green;
+  font-size: 32pt;
+  border-radius: 5px;
+}
+
+.high-scores-table {
+  min-width: 200px;
+}
+.high-score-row {
+  display: flex;
+}
+.high-score-row span {
+  padding: 3px;
+}
+.high-score-value {
+  min-width: 100px;
+}
+.high-score-value {
+  min-width: 100px;
+}

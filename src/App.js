@@ -1,11 +1,11 @@
 import React from 'react';
-import Dice from './Dice';
+import YahtzeeApp from './YahtzeeApp';
 import './App.css';
 
 function App() {
   return (
     <div className="App">
-      <Dice />
+      <YahtzeeApp />
     </div>
   );
 }
