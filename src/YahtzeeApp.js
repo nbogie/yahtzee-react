@@ -1,5 +1,8 @@
 //someone else's online version is here: https://cardgames.io/yahtzee/
 
+//state diagram
+//https://excalidraw.com/#json=5658700958138368,OIz6H0OQC3D6kwYcXSAk-w
+
 
 import React, { useState } from "react";
 
