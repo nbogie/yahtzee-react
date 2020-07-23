@@ -11,7 +11,7 @@ generated with [dependency-cruiser](https://github.com/sverweij/dependency-cruis
 
 #### hand-drawn
 
-![state transition diagram 1](./public/yahtzee-state-diagram.### png)
+![state transition diagram 1](./public/yahtzee-state-diagram.png)
 
 #### from rules
 
