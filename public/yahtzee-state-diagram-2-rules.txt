@@ -1,0 +1,15 @@
+initial,
+"yahtzee state diagram",
+
+"yahtzee state diagram" {
+
+  gameNotStarted => turnNotStarted : start game;
+  gameNotStarted => gameNotStarted : upload high score;
+  turnNotStarted => inPlay : roll;
+  inPlay => inPlay : roll;
+  inPlay  => turnNotStarted: allocateDice;
+  inPlay  => gameNotStarted : allocate dice (last one);
+};
+
+initial            => "preGame";
+"preGame" => gameNotStarted           : load game;
